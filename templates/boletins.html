@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Boletins</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+            font-size: 16px; /* Aumenta o tamanho da fonte */
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            font-size: 18px; /* Aumenta o tamanho da fonte dos cabeçalhos */
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* Alterna a cor de fundo das linhas */
+        }
+        tr:hover {
+            background-color: #f1f1f1; /* Efeito de destaque ao passar o mouse */
+        }
+        td {
+            line-height: 1.5; /* Aumenta o espaçamento entre linhas */
+        }
+    </style>
+</head>
+<body>
+    <h1>Boletins</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Código Diário</th>
+                <th>Disciplina</th>
+                <th>Carga Horária</th>
+                <th>Carga Horária Cumprida</th>
+                <th>Número de Faltas</th>
+                <th>Percentual de Carga Horária Frequentada</th>
+                <th>Situação</th>
+                <th>Notas</th>
+                <th>Faltas por Etapa</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for boletim in boletins %}
+            <tr>
+                <td>{{ boletim.codigo_diario }}</td>
+                <td>{{ boletim.disciplina }}</td>
+                <td>{{ boletim.carga_horaria }}</td>
+                <td>{{ boletim.carga_horaria_cumprida }}</td>
+                <td>{{ boletim.numero_faltas }}</td>
+                <td>{{ boletim.percentual_carga_horaria_frequentada | round(2) }}%</td>
+                <td>{{ boletim.situacao }}</td>
+                <td>
+                    {% for etapa in range(1, boletim.quantidade_avaliacoes + 1) %}
+                        Etapa {{ etapa }}: {{ boletim['nota_etapa_' + etapa|string] | default('N/A') }}<br>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for etapa in range(1, boletim.quantidade_avaliacoes + 1) %}
+                        Etapa {{ etapa }}: {{ boletim['nota_etapa_' + etapa|string]['faltas'] | default('N/A') }}<br>
+                    {% endfor %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
